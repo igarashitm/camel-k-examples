@@ -166,14 +166,23 @@ Allow access to the application, and you’ll end up on a page with `refresh_tok
 https://login.salesforce.com/services/oauth2/success#access_token=..&refresh_token=<refresh_token>&instance_url=...&issued_at=...&signature=...&scope=...&token_type=Bearer
 ```
 
-### 2.2. Creating a Kubernetes Secret from Salesforce credentials
+### 2.2. Creating a Kubernetes ConfigMap and Secret from properties file
 
-This repository contains a simple [salesforce.properties](didact://?commandId=vscode.openFolder&projectFilePath=10-knative-source-salesforce/salesforce.properties&completion=Opened%20the%salesforce.properties%20file "Opens the salesforce.properties file"){.didact} that can be used to generate a Kubernetes Secret with the Salesforce credential by replacing `<Your Client ID>`, `<Your Client Secret>` and `<Your Refresh Token>` with the actual values.
+This repository contains two properties file:
+* [salesforce.properties](didact://?commandId=vscode.openFolder&projectFilePath=10-knative-source-salesforce/salesforce.properties&completion=Opened%20the%salesforce.properties%20file "Opens the salesforce-secret.properties file"){.didact} that can be used to generate a Kubernetes ConfigMap. You can change topic name to create and subscribe by changing `salesforce.topic` property in the file.
+* [salesforce-secret.properties](didact://?commandId=vscode.openFolder&projectFilePath=10-knative-source-salesforce/salesforce-secret.properties&completion=Opened%20the%salesforce.properties%20file "Opens the salesforce-secret.properties file"){.didact} that can be used to generate a Kubernetes Secret with the Salesforce credential by replacing `<Your Client ID>`, `<Your Client Secret>` and `<Your Refresh Token>` with the actual values.
+
 
 ```
-kubectl create secret generic salesforce --from-file=salesforce.properties
+kubectl create configmap salesforce --from-file=salesforce.properties
 ```
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kubectl%20create%20secret%20generic%20salesforce%20--from-file%3Dsalesforce.properties&completion=secret%20%22salesforce%22%20created. "Create a secret with Salesforce credentials"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kubectl%20create%20configmap%20salesforce%20--from-file%3Dsalesforce.properties&completion=secret%20%22salesforce%22%20created. "Create a ConfigMap with Salesforce configuration"){.didact})
+
+```
+kubectl create secret generic salesforce-secret --from-file=salesforce-secret.properties
+```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kubectl%20create%20secret%20generic%20salesforce-secret%20--from-file%3Dsalesforce-secret.properties&completion=secret%20%22salesforce%22%20created. "Create a secret with Salesforce credentials"){.didact})
+
 
 ### 2.3. Creating a Knative Eventing channel
 

@@ -9,11 +9,13 @@ spec:
   source:
     integration:
       configuration:
-        - type: secret
+        - type: configmap
           value: salesforce
+        - type: secret
+          value: salesforce-secret
     flow:
       from:
-        uri: salesforce:camelTestTopic
+        uri: "salesforce:{{salesforce.topic}}"
         parameters:
           notifyForFields: ALL
           updateTopic: true
